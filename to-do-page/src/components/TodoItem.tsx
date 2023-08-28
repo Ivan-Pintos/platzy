@@ -1,16 +1,34 @@
 import { AiOutlineCheck, AiOutlineMore } from "react-icons/ai";
-import { tasksFormat } from "../../interfaces";
+import { tasksFormat, displayContainer } from "../../interfaces";
 interface TodoItemProps {
   task: tasksFormat;
   setTasks: React.Dispatch<React.SetStateAction<tasksFormat[]>>;
+  setDisplays: React.Dispatch<React.SetStateAction<displayContainer>>;
   setTaskSelected: React.Dispatch<
     React.SetStateAction<tasksFormat | undefined>
   >;
 }
 
-function TodoItem({ task, setTasks, setTaskSelected }: TodoItemProps) {
+function TodoItem({
+  task,
+  setTasks,
+  setTaskSelected,
+  setDisplays,
+}: TodoItemProps) {
   const iconsClass =
     "hover:cursor-pointer text-xl hover:text-3xl transition-all";
+  const handleOpenContainer = () => {
+    setDisplays((prev) => {
+      const newObject = { ...prev };
+      for (const key in newObject) {
+        key === "containerModified"
+          ? (newObject[key] = true)
+          : (newObject[key] = false);
+      }
+
+      return newObject;
+    });
+  };
   return (
     <li className=" border rounded p-2 flex justify-between items-center">
       <AiOutlineCheck
@@ -38,6 +56,7 @@ function TodoItem({ task, setTasks, setTaskSelected }: TodoItemProps) {
         className={`${iconsClass} hover:text-white`}
         onClick={() => {
           setTaskSelected(task);
+          handleOpenContainer();
         }}
       />
     </li>

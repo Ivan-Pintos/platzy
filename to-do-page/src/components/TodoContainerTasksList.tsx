@@ -1,5 +1,5 @@
+import { tasksFormat, displayContainer } from "../../interfaces.ts";
 import { TodoCreateButton } from "./TodoCreateButton.tsx";
-import { tasksFormat } from "../../interfaces.ts";
 import { TodoSeacrh } from "./TodoSearch.tsx";
 import { TodoTitle } from "./TodoTitle.tsx";
 import { TodoItem } from "./TodoItem.tsx";
@@ -12,11 +12,13 @@ interface TodoContainerTasksListProps {
   setTaskSelected: React.Dispatch<
     React.SetStateAction<tasksFormat | undefined>
   >;
+  setDisplays: React.Dispatch<React.SetStateAction<displayContainer>>;
 }
 function TodoContainerTasksList({
   tasks,
   setTasks,
   setTaskSelected,
+  setDisplays,
 }: TodoContainerTasksListProps) {
   const [searchValue, setSearchValue] = useState<string>("");
   const handleTasksCompleted = tasks.filter((task) => task.completed).length;
@@ -50,13 +52,14 @@ function TodoContainerTasksList({
                   setTasks={setTasks}
                   setTaskSelected={setTaskSelected}
                   key={task.title}
+                  setDisplays={setDisplays}
                 />
               )
           )}
         </TodoList>
       </div>
 
-      <TodoCreateButton />
+      <TodoCreateButton setDisplays={setDisplays} />
     </div>
   );
 }

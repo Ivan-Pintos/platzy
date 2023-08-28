@@ -3,5 +3,9 @@ interface tasksFormat {
   description: string;
   completed: boolean;
 }
-
-export type { tasksFormat };
+interface displayContainer {
+  [key: string]: boolean;
+  containerCreate: boolean;
+  containerModified: boolean;
+}
+export type { tasksFormat, displayContainer };

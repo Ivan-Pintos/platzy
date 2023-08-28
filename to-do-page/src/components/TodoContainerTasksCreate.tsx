@@ -1,15 +1,21 @@
 // import { AiOutlinePlus } from "react-icons/ai";
-import { tasksFormat } from "../../interfaces";
+import { tasksFormat, displayContainer } from "../../interfaces";
 import { useState } from "react";
 
 interface TodoContainerTasksCreateProps {
   setTasks: React.Dispatch<React.SetStateAction<tasksFormat[]>>;
+  setDisplays: React.Dispatch<React.SetStateAction<displayContainer>>;
+  displays: displayContainer;
 }
 interface FormState {
   title: string;
   description: string;
 }
-function TodoContainerTasksCreate({ setTasks }: TodoContainerTasksCreateProps) {
+function TodoContainerTasksCreate({
+  setTasks,
+  displays,
+  setDisplays,
+}: TodoContainerTasksCreateProps) {
   const [formValues, setFormValues] = useState<FormState>({
     title: "",
     description: "",
@@ -23,8 +29,9 @@ function TodoContainerTasksCreate({ setTasks }: TodoContainerTasksCreateProps) {
     }));
   };
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    const { description, title } = formValues;
     event.preventDefault();
+    const { description, title } = formValues;
+    if (!description.slice() || !title.slice()) return;
     setTasks((prev) => [
       ...prev,
       {
@@ -34,11 +41,19 @@ function TodoContainerTasksCreate({ setTasks }: TodoContainerTasksCreateProps) {
       },
     ]);
     setFormValues({ title: "", description: "" });
+    setDisplays((prev) => {
+      for (const key in prev) {
+        prev[key] = false;
+      }
+      return prev;
+    });
   };
 
   return (
     <form
-      className="w-1/2  h-5/6 b gap-5 border rounded m-10 shadow-md shadow-slate-500 flex flex-col p-5"
+      className={` transition-all time overflow-hidden  duration-500 h-5/6 b gap-5 border rounded m-10 flex flex-col p-5 ${
+        !displays.containerCreate ? "w-0 opacity-0" : "w-1/2 opacity-100"
+      } `}
       onSubmit={handleSubmit}
       method="post"
     >
